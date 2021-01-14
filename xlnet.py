@@ -5,11 +5,14 @@ from torch.nn import CrossEntropyLoss, MSELoss
 
 from global_configs import *
 from modeling import MAG
-from transformers.modeling_xlnet import XLNetPreTrainedModel
-from transformers.modeling_xlnet import (
-    XLNetLayer,
-    SequenceSummary,
-)
+from transformers.models.xlnet.modeling_xlnet import XLNetPreTrainedModel  # fixes import commented out below
+# from transformers.modeling_xlnet import XLNetPreTrainedModel
+
+from transformers.models.xlnet.modeling_xlnet import (XLNetLayer, SequenceSummary)
+# from transformers.modeling_xlnet import (
+#    XLNetLayer,
+#    SequenceSummary,
+# )
 
 
 class MAG_XLNetModel(XLNetPreTrainedModel):

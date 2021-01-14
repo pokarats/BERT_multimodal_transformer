@@ -3,8 +3,10 @@ import torch
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 os.environ["WANDB_PROGRAM"] = "multimodal_driver.py"
+os.environ["WANDB_MODE"] = "dryrun"
 
-DEVICE = torch.device("cuda:0")
+#DEVICE = torch.device("cuda:0")
+DEVICE = torch.device("cpu")
 
 # MOSI SETTING
 ACOUSTIC_DIM = 74
