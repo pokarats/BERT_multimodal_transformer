@@ -265,9 +265,9 @@ def set_up_data_loader():
     dev_data = data["dev"]
     test_data = data["test"]
 
-    train_data = train_data[:8]
-    dev_data = dev_data[:2]
-    test_data = test_data[:2]
+    #train_data = train_data[:8]
+    #dev_data = dev_data[:2]
+    #test_data = test_data[:2]
 
     (text, visual, audio), label_id, seg_id = train_data[:1][0]
     print(f'text data: {text}\nvisual:{visual}\naudio:\n{audio}\nlabel id:{label_id}\nseg_id: {seg_id}')
@@ -370,18 +370,27 @@ def prep_for_training(num_train_optimization_steps: int):
 
 
 def train_epoch(model: nn.Module, train_dataloader: DataLoader, optimizer, scheduler):
+    """
+    got rid of acoustic modality
+
+    :param model:
+    :param train_dataloader:
+    :param optimizer:
+    :param scheduler:
+    :return:
+    """
     model.train()
     tr_loss = 0
     nb_tr_examples, nb_tr_steps = 0, 0
     for step, batch in enumerate(tqdm(train_dataloader, desc="Iteration")):
         batch = tuple(t.to(DEVICE) for t in batch)
-        input_ids, visual, acoustic, input_mask, segment_ids, label_ids = batch
+        input_ids, visual, input_mask, segment_ids, label_ids = batch # got rid of acoustic
         visual = torch.squeeze(visual, 1)
-        acoustic = torch.squeeze(acoustic, 1)
+        # acoustic = torch.squeeze(acoustic, 1)
         outputs = model(
             input_ids,
             visual,
-            acoustic,
+            # acoustic,
             token_type_ids=segment_ids,
             attention_mask=input_mask,
             labels=None,
@@ -407,6 +416,14 @@ def train_epoch(model: nn.Module, train_dataloader: DataLoader, optimizer, sched
 
 
 def eval_epoch(model: nn.Module, dev_dataloader: DataLoader, optimizer):
+    """
+    got rid of acoustic
+
+    :param model:
+    :param dev_dataloader:
+    :param optimizer:
+    :return:
+    """
     model.eval()
     dev_loss = 0
     nb_dev_examples, nb_dev_steps = 0, 0
@@ -414,13 +431,13 @@ def eval_epoch(model: nn.Module, dev_dataloader: DataLoader, optimizer):
         for step, batch in enumerate(tqdm(dev_dataloader, desc="Iteration")):
             batch = tuple(t.to(DEVICE) for t in batch)
 
-            input_ids, visual, acoustic, input_mask, segment_ids, label_ids = batch
+            input_ids, visual, input_mask, segment_ids, label_ids = batch # shouldn't be acoustic in batch
             visual = torch.squeeze(visual, 1)
-            acoustic = torch.squeeze(acoustic, 1)
+            # acoustic = torch.squeeze(acoustic, 1)
             outputs = model(
                 input_ids,
                 visual,
-                acoustic,
+                # acoustic,
                 token_type_ids=segment_ids,
                 attention_mask=input_mask,
                 labels=None,
@@ -440,6 +457,13 @@ def eval_epoch(model: nn.Module, dev_dataloader: DataLoader, optimizer):
 
 
 def test_epoch(model: nn.Module, test_dataloader: DataLoader):
+    """
+    got rid of acoustic
+
+    :param model:
+    :param test_dataloader:
+    :return:
+    """
     model.eval()
     preds = []
     labels = []
@@ -448,13 +472,13 @@ def test_epoch(model: nn.Module, test_dataloader: DataLoader):
         for batch in tqdm(test_dataloader):
             batch = tuple(t.to(DEVICE) for t in batch)
 
-            input_ids, visual, acoustic, input_mask, segment_ids, label_ids = batch
+            input_ids, visual, input_mask, segment_ids, label_ids = batch  # no acoustic!
             visual = torch.squeeze(visual, 1)
-            acoustic = torch.squeeze(acoustic, 1)
+            # acoustic = torch.squeeze(acoustic, 1)
             outputs = model(
                 input_ids,
                 visual,
-                acoustic,
+                # acoustic,
                 token_type_ids=segment_ids,
                 attention_mask=input_mask,
                 labels=None,

@@ -27,6 +27,7 @@ class MAG(nn.Module):
         weight_v = F.relu(self.W_hv(torch.cat((visual, text_embedding), dim=-1)))
         # weight_a = F.relu(self.W_ha(torch.cat((acoustic, text_embedding), dim=-1)))
 
+        # is h_m still necessary??? need to re-read paper
         h_m = weight_v * self.W_v(visual)  # + weight_a * self.W_a(acoustic)
 
         em_norm = text_embedding.norm(2, dim=-1)
@@ -42,6 +43,7 @@ class MAG(nn.Module):
         alpha = torch.min(thresh_hold, ones)
         alpha = alpha.unsqueeze(dim=-1)
 
+        # what does alpha do and do we need this line?
         acoustic_vis_embedding = alpha * h_m
 
         embedding_output = self.dropout(
