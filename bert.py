@@ -18,7 +18,7 @@ from transformers.activations import gelu, gelu_new, silu  # swish: silu in the 
 from transformers.models.bert.configuration_bert import BertConfig
 # from transformers.configuration_bert import BertConfig
 
-from transformers.models.bert.modeling_bert import BertEmbeddings, BertEncoder, BertPooler # fixes the import below
+from transformers.models.bert.modeling_bert import BertEmbeddings, BertEncoder, BertPooler  # fixes the import below
 # from transformers.modeling_bert import BertEmbeddings, BertEncoder, BertPooler
 from transformers.modeling_utils import (
     PreTrainedModel,
