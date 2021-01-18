@@ -23,6 +23,7 @@ class MAG(nn.Module):
         self.dropout = nn.Dropout(dropout_prob)
 
     def forward(self, text_embedding, visual):  # got rid of acoustic arg
+        # TODO: figure out if the h_m layer is necesary? if it should be kept?
         eps = 1e-6
         weight_v = F.relu(self.W_hv(torch.cat((visual, text_embedding), dim=-1)))
         # weight_a = F.relu(self.W_ha(torch.cat((acoustic, text_embedding), dim=-1)))
